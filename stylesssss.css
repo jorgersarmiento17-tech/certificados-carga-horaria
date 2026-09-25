@@ -1,0 +1,69 @@
+/* =========================================================================
+   ARCHIVO: styles.css (DISEÑO ADMINISTRATIVO Y COMPACTACIÓN DE FUENTES)
+   ========================================================================= */
+
+   :root {
+    --bg-admin: #f1f5f9;
+    --sidebar-bg: #0f172a;
+    --text-light: #f8fafc;
+    --accent-color: #2563eb;
+    --border-color: #cbd5e1;
+    --form-bg: #1e293b;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-admin); display: flex; height: 100vh; overflow: hidden; }
+
+.interface-container { width: 320px; background-color: var(--sidebar-bg); color: var(--text-light); display: flex; flex-direction: column; padding: 25px; box-shadow: 4px 0 15px rgba(0,0,0,0.15); z-index: 10; }
+.sidebar-header { padding-bottom: 20px; border-bottom: 1px solid #334155; margin-bottom: 25px; }
+.sidebar-header h2 { font-size: 1.35rem; color: #f1f5f9; font-weight: 700; letter-spacing: 0.5px; }
+.sidebar-header p { font-size: 0.85rem; color: #94a3b8; margin-top: 5px; }
+.sidebar-content { flex: 1; }
+.form-group { margin-bottom: 25px; }
+.form-group label { display: block; margin-bottom: 10px; font-size: 0.9rem; color: #cbd5e1; font-weight: 500; }
+
+select { width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #475569; background-color: var(--form-bg); color: white; font-size: 0.95rem; outline: none; transition: border 0.2s; cursor: pointer; }
+select:focus { border-color: var(--accent-color); }
+.btn-primary { width: 100%; padding: 14px; border: none; border-radius: 6px; background-color: var(--accent-color); color: white; font-size: 1rem; font-weight: bold; cursor: pointer; transition: background 0.2s; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.btn-primary:hover:not(:disabled) { background-color: #1d4ed8; }
+.btn-primary:disabled { background-color: #475569; cursor: not-allowed; opacity: 0.5; }
+.sidebar-footer { font-size: 0.78rem; color: #64748b; text-align: center; border-top: 1px solid #334155; padding-top: 20px; margin-top: auto; }
+
+.document-preview { flex: 1; padding: 40px; overflow-y: auto; display: flex; justify-content: center; background-color: #cbd5e1; }
+.placeholder-text { color: #475569; font-style: italic; text-align: center; margin-top: 120px; font-size: 1.15rem; max-width: 500px; line-height: 1.5; }
+
+/* CONFIGURACIÓN REGLAMENTARIA HOJA A4 */
+.certificado-page { background: white; width: 210mm; min-height: 297mm; padding: 25mm; position: relative; box-shadow: 0 4px 20px rgba(0,0,0,0.2); display: flex; flex-direction: column; color: #000; font-family: 'Arial', sans-serif; line-height: 1.6; }
+
+.cert-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px; border-bottom: 2px solid #000; padding-bottom: 15px; width: 100%; min-height: 80px; height: auto; overflow: visible; }
+.cert-logo { width: 70px !important; height: 70px !important; max-width: 70px !important; max-height: 70px !important; display: block; flex-shrink: 0; margin-right: 15px; }
+.cert-header-text { text-align: right; font-size: 0.82rem; font-weight: bold; line-height: 1.4; flex-grow: 1; word-wrap: break-word; }
+
+.cert-title { text-align: center; font-size: 1.15rem; font-weight: bold; margin-bottom: 30px; line-height: 1.4; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 15px; }
+
+/* FUENTE DEL CUERPO FUERTEMENTE COMPACTADA Y REDUCIDA */
+.cert-body { text-align: justify; font-size: 0.88rem; margin-bottom: 25px; }
+.cert-body p { margin-bottom: 14px; text-indent: 0px !important; } /* Sin sangrías */
+.cert-body strong { font-weight: bold; }
+
+/* TABLA TÉCNICA DEL INFORME */
+.cert-table-title { font-size: 0.85rem; font-weight: bold; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+.cert-table { width: 100%; border-collapse: collapse; margin-bottom: 35px; font-size: 0.85rem; }
+.cert-table th, .cert-table td { border: 1px solid #000; padding: 8px 12px; text-align: left; }
+.cert-table th { background-color: #f1f5f9; font-weight: bold; font-size: 0.8rem; text-transform: uppercase; }
+.cert-table .col-horas { text-align: right; width: 130px; }
+.cert-table .row-total { font-weight: bold; background-color: #f8fafc; }
+
+/* SECCIÓN DE FIRMAS */
+.cert-signatures { margin-top: auto; display: flex; justify-content: space-between; padding-top: 40px; width: 100%; }
+.signature-block { width: 45%; text-align: center; font-size: 0.85rem; display: flex; flex-direction: column; align-items: center; }
+.signature-line { border-top: 1px solid #000; margin-bottom: 12px; width: 85%; }
+.cert-footer-note { font-size: 0.68rem; color: #334155; border-top: 1px dashed #94a3b8; padding-top: 10px; margin-top: 35px; font-style: italic; text-align: center; width: 100%; }
+
+@media print {
+    body, html { background: none; background-color: #fff; width: 210mm; height: 297mm; overflow: visible; }
+    .interface-container { display: none !important; }
+    .document-preview { background: none; padding: 0; overflow: visible; width: 210mm; height: 297mm; }
+    .certificado-page { box-shadow: none; margin: 0; padding: 25mm; width: 210mm; min-height: 297mm; position: absolute; top: 0; left: 0; page-break-inside: avoid; }
+    @page { size: A4 portrait; margin: 0; }
+}
