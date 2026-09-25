@@ -1,26 +1,22 @@
 // =========================================================================
-// ARCHIVO: app.js (MOTOR OPERATIVO Y LOGICA DE FILTRADO INSTITUCIONAL)
-// Comisión de Planeamiento Institucional - UEF La Dolorosa
-// Elaborado por: Ab. Giovanna Salinas y Jorge Sarmiento Zumba
+// ARCHIVO: app.js (MOTOR DE INTERFAZ Y MAQUETACIÓN W3C PARA IMPRESIÓN)
+// Generador Automatizado de Certificaciones - UEF La Dolorosa
 // =========================================================================
 
 document.addEventListener("DOMContentLoaded", () => {
     const select = document.getElementById("docente-select");
-    const articuloSelect = document.getElementById("articulo-select"); // Selector de artículo dinámico
+    const articuloSelect = document.getElementById("articulo-select");
     const override = document.getElementById("titulo-override");
     const btn = document.getElementById("btn-print");
     const container = document.getElementById("certificado-a4");
 
-    // Validar enlazado correcto de módulos de datos secuenciales
     if (typeof DATA_DOCENTES === 'undefined' || typeof DATA_HORARIOS === 'undefined') {
         console.error("Error crítico: No se detectan las variables globales de docentes o horarios.");
         return;
     }
 
-    // 🛠️ COMPORTAMIENTO BLINDADO: Forzar limpieza previa para que jamás se duplique el menú desplegable
     select.innerHTML = '<option value="">-- Seleccione un docente --</option>';
 
-    // 1. Población del Selector Alfabético Limpio (A-Z)
     const profesoresDisponibles = Object.keys(DATA_DOCENTES).sort((a, b) => a.localeCompare(b));
     profesoresDisponibles.forEach(profesor => {
         const option = document.createElement("option"); 
@@ -29,24 +25,21 @@ document.addEventListener("DOMContentLoaded", () => {
         select.appendChild(option);
     });
 
-    // Escuchadores reactivos integrados
     select.addEventListener("change", renderCertificado);
     if (articuloSelect) articuloSelect.addEventListener("change", renderCertificado);
     override.addEventListener("change", renderCertificado);
     btn.addEventListener("click", () => window.print());
 
-    // FUNCIÓN AUXILIAR DE HIGIENIZACIÓN: Remueve tildes, puntos, mayúsculas y espacios basura
     function normalizarIdentificador(str) {
         if (!str) return "";
         return str.toString().toLowerCase()
             .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "") // Limpia tildes (á -> a)
-            .replace(/\./g, "")             // Limpia puntos huerfanos o finales
-            .replace(/\s+/g, " ")           // Consolida espacios duplicados
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/\./g, "")
+            .replace(/\s+/g, " ")
             .trim();
     }
 
-    // 2. Motor principal de reducción y renderizado del documento
     function renderCertificado() {
         const profesorKey = select.value;
         if (!profesorKey) {
@@ -58,28 +51,20 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.disabled = false;
         const meta = DATA_DOCENTES[profesorKey];
         let tituloFormal = override.value === "AUTO" ? meta.titulo : override.value;
-
-        // Obtener el artículo dinámico elegido en la barra lateral ("El" o "La"). Por defecto "El" si no existe el control.
         const articuloElegido = articuloSelect ? articuloSelect.value : "El";
 
-        // ALGORITMO BLINDADO DE CORRESPONDENCIA POR IGUALDAD ESTRICTA NORMALIZADA
         const claveBuscada = normalizarIdentificador(profesorKey);
-// Busca esta línea en tu app.js y déjala exactamente así:
-const clasesDocente = DATA_HORARIOS.filter(clase => normalizarIdentificador(clase.Profesor) === claveBuscada);
+        const clasesDocente = DATA_HORARIOS.filter(clase => normalizarIdentificador(clase.Profesor) === claveBuscada);
 
         let totalHoras = 0;
         let tutorDeCurso = null;
         const agrupacion = {};
 
-        // Procesamiento y consolidación de la carga académica por Clave Compuesta (Materia + Paralelo)
         clasesDocente.forEach(clase => {
             totalHoras++;
-            
-            // Detector automático reactivo de la condición de Tutoría Institucional
             if (normalizarIdentificador(clase.Asignatura).includes("civica y acompanamiento")) {
                 tutorDeCurso = clase.Curso;
             }
-
             const hashKey = `${clase.Asignatura} | ${clase.Curso}`;
             if (!agrupacion[hashKey]) {
                 agrupacion[hashKey] = { asignatura: clase.Asignatura, curso: clase.Curso, horas: 0 };
@@ -89,13 +74,12 @@ const clasesDocente = DATA_HORARIOS.filter(clase => normalizarIdentificador(clas
 
         const tablaResumen = Object.values(agrupacion).sort((a, b) => a.asignatura.localeCompare(b.asignatura));
 
-        // Formateador nativo de números altos a texto legal castellano
         const conversionLetras = (num) => {
-            const u = ["cero", "una", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve", "diez", "once", "doce", "trece", "catorce", "quince", "dieciséis", "diecisiete", "dieciocho", "diecinueve", "veinte", "veintiuna", "veintidós", "veintitrés", "veinticuatro", "veinticinco", "veintiséis", "veintisiete", "veintiocho", "veintinueve", "treinta", "treinta y una", "treinta y dos", "treinta y tres", "treinta y cuatro", "treinta y cinco", "treinta y seis", "treinta y siete", "treinta y ocho", "treinta y nueve", "cuarenta"];
+            const u = ["cero", "una", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve", "diez", "once", "doce", "trece", "catorce", "quince", "dieciséis", "diecisiete", "dieciocho", "diecinueve", "veinte", "veintiuna", "veintidós", "veintitrés", "veinticuatro", "veinticinco", "veintiséis", "veintisiete", "veintiocho", "veintinueve", "treinta"];
             return u[num] || num.toString();
         };
 
-        // Renderizado dinámico del componente técnico de la Tabla alineado al PDF oficial
+        // 🛠️ REFACTORIZACIÓN MAESTRA: Estructuración limpia usando thead y tbody separados para soporte de quiebre
         let tablaHTML = `
             <div class="cert-table-title">CUADRO RESUMEN DE DISTRIBUCIÓN DE TRABAJO:</div>
             <table class="cert-table">
@@ -131,17 +115,11 @@ const clasesDocente = DATA_HORARIOS.filter(clase => normalizarIdentificador(clas
             textoTutoriaHTML = `<p>De igual manera, se deja constancia formal que el/la profesional mencionado/a ejerce las funciones de <strong>Docente Tutor</strong> del curso <strong>${tutorDeCurso}</strong>, liderando el acompañamiento educativo integral del paralelo respectivo durante el presente periodo.</p>`;
         }
 
-        // Inyección estructural total del Certificado oficial A4 en la vista previa del DOM
         container.innerHTML = `
-                        <div class="cert-header">
+            <div class="cert-header">
                 <img src="escudo.png" alt="Escudo UEF La Dolorosa" class="cert-logo">
-                <div class="cert-header-text">
-                    MINISTERIO DE EDUCACIÓN<br>
-                    COORDINACIÓN ZONAL 7 - DISTRITO 11D01<br>
-                    UNIDAD EDUCATIVA FISCOMISIONAL LA DOLOROSA
-                </div>
+                <div class="cert-header-text">MINISTERIO DE EDUCACIÓN<br>COORDINACIÓN ZONAL 7 - DISTRITO 11D01<br>UNIDAD EDUCATIVA FISCOMISIONAL "LA DOLOROSA"</div>
             </div>
-
             <div class="cert-title">CERTIFICADO DE DISTRIBUTIVO DE CARGA HORARIA SEMANAL</div>
             <div class="cert-body">
                 <p>El Vicerrectorado de la Unidad Educativa Fiscomisional "La Dolorosa", en cumplimiento con las normativas legales vigentes y la planificación del orgánico funcional institucional,</p>
