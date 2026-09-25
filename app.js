@@ -132,7 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
             ${tablaHTML}
             <div class="cert-signatures">
                 <div class="signature-block"><div class="signature-line"></div><strong>Mgtr. Patricio Espinoza</strong><br>Vicerrector de la Jornada Matutina</div>
-                <div class="signature-block"><div class="signature-line"></div><strong>Ab. Giovanna Salinas</strong><br>Secretaria / Vicerrectorado</div>
+                <div class="signature-block"><div class="signature-line"></div><strong>Mgtr. Giovanna Salinas</strong><br>Secretaria / Vicerrectorado</div>
             </div>
             <div class="cert-footer-note">Elaborado por: Jorge Sarmiento Zumba | Coordinador de la Comisión de Planeamiento Institucional.</div>
         `;
