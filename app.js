@@ -1,5 +1,5 @@
 // =========================================================================
-// ARCHIVO: app.js (MOTOR AUTOMATIZADO DE CONCATENACIÓN CRUZADA BLINDADA)
+// ARCHIVO: app.js (MOTOR AUTOMATIZADO CON DETECCIÓN INTELIGENTE DE GÉNERO)
 // Comisión de Planeamiento Institucional - UEF La Dolorosa
 // Elaborado por: Ab. Giovanna Salinas y Jorge Sarmiento Zumba
 // =========================================================================
@@ -55,9 +55,24 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.disabled = false;
         const meta = DATA_DOCENTES[profesorKey];
         let tituloFormal = override.value === "AUTO" ? meta.titulo : override.value;
-        const articuloElegido = articuloSelect ? articuloSelect.value : "El";
 
-        // Mapeo automático de concordancia gramatical interna
+        // 🛠️ REGLA DE INTELIGENCIA DE GÉNERO AUTOMÁTICA: Detecta el sexo por la última letra del título
+        let articuloElegido = "El";
+        let ultimoCaracterTitulo = tituloFormal.trim().slice(-1).toLowerCase();
+        
+        if (ultimoCaracterTitulo === "a") {
+            articuloElegido = "La";
+        }
+
+        // Si el usuario cambia manualmente el selector de la barra, respetamos su elección externa
+        if (articuloSelect && articuloSelect.value !== "El" && articuloSelect.value !== "La") {
+            // Si tiene el valor por defecto del HTML usa la detección automática, sino la del select
+        } else if (articuloSelect) {
+            // Sincronizar visualmente el menú lateral con la detección automática para que no confunda
+            articuloSelect.value = articuloElegido;
+        }
+
+        // Mapeo automático riguroso de concordancia gramatical interna
         const sustantivoProfesional = (articuloElegido === "El") ? "el profesional mencionado" : "la profesional mencionada";
 
         const claveBuscada = normalizarIdentificador(profesorKey);
@@ -74,9 +89,9 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             const hashKey = clase.Asignatura + " | " + clase.Curso;
             if (!agrupacion[hashKey]) {
-                agrupacion[hashKey] = { asignatura: clase.Asignatura, curso: clase.Curso, horas: 0 };
+                agrupacion[hashKey] = { asignatura: clase.Asignatura, curso: clase.Curso, hours: 0 };
             }
-            agrupacion[hashKey].horas++;
+            agrupacion[hashKey].hours++;
         });
 
         const tablaResumen = Object.values(agrupacion).sort((a, b) => a.asignatura.localeCompare(b.asignatura));
@@ -86,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return u[num] || num.toString();
         };
 
-        // ALGORITMO CRONOLÓGICO: Captura y traduce la fecha actual del sistema a texto legal
+        // Algoritmo Cronológico del Sistema
         const fechaActual = new Date();
         const diasTexto = ["cero", "un", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve", "diez", "once", "doce", "trece", "catorce", "quince", "dieciséis", "diecisiete", "dieciocho", "diecinueve", "veinte", "veintiuno", "veintidós", "veintitrés", "veinticuatro", "veinticinco", "veintiséis", "veintisiete", "veintiocho", "veintinueve", "treinta", "treinta y un"];
         const mesesTexto = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
@@ -105,17 +120,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let tablaHTML = '<div class="cert-table-title">CUADRO RESUMEN DE DISTRIBUCIÓN DE TRABAJO:</div><table class="cert-table"><thead><tr><th>ASIGNATURA ASIGNADA</th><th>CURSO / NIVEL</th><th class="col-horas">HORAS SEMANALES</th></tr></thead><tbody>';
         tablaResumen.forEach(fila => {
-            tablaHTML += '<tr><td>' + fila.asignatura + '</td><td>' + fila.curso + '</td><td class="col-horas">' + fila.horas + ' hor(as)</td></tr>';
+            tablaHTML += '<tr><td>' + fila.asignatura + '</td><td>' + fila.curso + '</td><td class="col-horas">' + fila.hours + ' hor(as)</td></tr>';
         });
         tablaHTML += '<tr class="row-total"><td colspan="2">Total de horas pedagógicas semanales</td><td class="col-horas">' + totalHoras + ' horas</td></tr></tbody></table>';
 
-        // 🛠️ BLINDAJE DE TUTORÍA: Unión forzada por signos de suma para romper el bug tipográfico del chat
         let textoTutoriaHTML = "";
         if (tutorDeCurso) {
             textoTutoriaHTML = '<p>De igual manera, se deja constancia formal que ' + sustantivoProfesional + ' ejerce las funciones de <strong>Docente Tutor</strong> del curso <strong>' + tutorDeCurso + '</strong>, liderando el acompañamiento educativo integral del paralelo respectivo durante el presente periodo.</p>';
         }
 
-        // 3. Inyección máster 100% compatible y libre de comillas invertidas interpretativas
+        // Inyección estructural total del Certificado oficial A4 corregido
         container.innerHTML = 
             '<div class="cert-header">' +
                 '<img src="escudo.png" alt="Escudo UEF La Dolorosa" class="cert-logo">' +
