@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return u[num] || num.toString();
         };
 
-        // 🛠️ ALGORITMO CRONOLÓGICO: Captura y traduce la fecha actual del sistema a texto legal
+        // ALGORITMO CRONOLÓGICO: Captura y traduce la fecha actual del sistema a texto legal
         const fechaActual = new Date();
         const diasTexto = ["cero", "un", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve", "diez", "once", "doce", "trece", "catorce", "quince", "dieciséis", "diecisiete", "dieciocho", "diecinueve", "veinte", "veintiuno", "veintidós", "veintitrés", "veinticuatro", "veinticinco", "veintiséis", "veintisiete", "veintiocho", "veintinueve", "treinta", "treinta y un"];
         const mesesTexto = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
@@ -134,7 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
             </table>
         `;
 
-        // 3. Inyección limpia en el contenedor A4 con todas las variables corregidas con su respectivo signo "\$"
+        // 3. Inyección limpia en el contenedor A4 con todas las variables de tutoría corregidas estrictamente
         container.innerHTML = `
             <div class="cert-header">
                 <img src="escudo.png" alt="Escudo UEF La Dolorosa" class="cert-logo">
