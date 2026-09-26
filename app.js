@@ -134,7 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
             </table>
         `;
 
-        // 3. Inyección limpia en el contenedor A4 con concordancias corregidas
+        // 3. Inyección limpia en el contenedor A4 con todas las variables corregidas con su respectivo signo "\$"
         container.innerHTML = `
             <div class="cert-header">
                 <img src="escudo.png" alt="Escudo UEF La Dolorosa" class="cert-logo">
