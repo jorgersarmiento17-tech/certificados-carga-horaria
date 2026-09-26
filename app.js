@@ -1,7 +1,7 @@
 // =========================================================================
-// ARCHIVO: app.js (MOTOR AUTOMATIZADO CON GÉNERO ELÁSTICO Y FECHA DINÁMICA)
+// ARCHIVO: app.js (MOTOR AUTOMATIZADO CON CONCATENACIÓN CONCORDANTE COMPLETA)
 // Comisión de Planeamiento Institucional - UEF La Dolorosa
-// Elaborado por: Ab. Giovanna Salinas y Jorge Sarmiento Zumba
+// Elaborado por: Jorge Sarmiento Zumba
 // =========================================================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function renderCertificado() {
         const profesorKey = select.value;
         if (!profesorKey) {
-            container.innerHTML = `<div class="placeholder-text"><p>Por favor, seleccione un docente del listado de la barra lateral izquierda para procesar las horas pedagógicas y generar la vista previa del certificado legal A4.</p></div>`;
+            container.innerHTML = '<div class="placeholder-text"><p>Por favor, seleccione un docente del listado de la barra lateral izquierda para procesar las horas pedagógicas y generar la vista previa del certificado legal A4.</p></div>';
             btn.disabled = true;
             return;
         }
@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let tituloFormal = override.value === "AUTO" ? meta.titulo : override.value;
         const articuloElegido = articuloSelect ? articuloSelect.value : "El";
 
-        // Mapeo automático de concordancia gramatical interna para remover el el/la
+        // Mapeo automático de concordancia gramatical interna para remover el el/la de raíz
         const sustantivoProfesional = (articuloElegido === "El") ? "el profesional mencionado" : "la profesional mencionada";
 
         const claveBuscada = normalizarIdentificador(profesorKey);
@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (normalizarIdentificador(clase.Asignatura).includes("civica y acompanamiento")) {
                 tutorDeCurso = clase.Curso;
             }
-            const hashKey = `${clase.Asignatura} | ${clase.Curso}`;
+            const hashKey = clase.Asignatura + " | " + clase.Curso;
             if (!agrupacion[hashKey]) {
                 agrupacion[hashKey] = { asignatura: clase.Asignatura, curso: clase.Curso, horas: 0 };
             }
@@ -95,7 +95,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const mesTexto = mesesTexto[fechaActual.getMonth()];
         const anioNum = fechaActual.getFullYear();
 
-        // Conversión escrita del año de forma dinámica
         let anioTexto = "dos mil veintiséis";
         if (anioNum === 2027) anioTexto = "dos mil veintisiete";
         else if (anioNum === 2028) anioTexto = "dos mil veintiocho";
@@ -104,57 +103,38 @@ document.addEventListener("DOMContentLoaded", () => {
         let diaEstructurado = "a los " + diasTexto[diaNum] + " días";
         if (diaNum === 1) diaEstructurado = "al primer día";
 
-        let tablaHTML = `
-            <div class="cert-table-title">CUADRO RESUMEN DE DISTRIBUCIÓN DE TRABAJO:</div>
-            <table class="cert-table">
-                <thead>
-                    <tr>
-                        <th>ASIGNATURA ASIGNADA</th>
-                        <th>CURSO / NIVEL</th>
-                        <th class="col-horas">HORAS SEMANALES</th>
-                    </tr>
-                </thead>
-                <tbody>
-        `;
+        let tablaHTML = '<div class="cert-table-title">CUADRO RESUMEN DE DISTRIBUCIÓN DE TRABAJO:</div><table class="cert-table"><thead><tr><th>ASIGNATURA ASIGNADA</th><th>CURSO / NIVEL</th><th class="col-horas">HORAS SEMANALES</th></tr></thead><tbody>';
+        tablaResumen.forEach(fila => {
+            tablaHTML += '<tr><td>' + fila.asignatura + '</td><td>' + fila.curso + '</td><td class="col-horas">' + fila.horas + ' hor(as)</td></tr>';
+        });
+        tablaHTML += '<tr class="row-total"><td colspan="2">Total de horas pedagógicas semanales</td><td class="col-horas">' + totalHoras + ' horas</td></tr></tbody></table>';
 
-        if (tablaResumen.length === 0) {
-            tablaHTML += `<tr><td colspan="3" style="text-align:center; color:red; font-weight:bold; padding:20px;">No se encontraron registros de clases cargados para este docente en la base de datos de horarios.</td></tr>`;
-        } else {
-            tablaResumen.forEach(fila => {
-                tablaHTML += `<tr><td>${fila.asignatura}</td><td>${fila.curso}</td><td class="col-horas">${fila.horas} hor(as)</td></tr>`;
-            });
+        // Construcción segura del fragmento dinámico de tutoría mediante concatenación clásica limpia
+        let textoTutoriaHTML = "";
+        if (tutorDeCurso) {
+            textoTutoriaHTML = '<p>De igual manera, se deja constancia formal que ' + sustantivoProfesional + ' ejerce las funciones de <strong>Docente Tutor</strong> del curso <strong>' + tutorDeCurso + '</strong>, liderando el acompañamiento educativo integral del paralelo respectivo durante el presente periodo.</p>';
         }
 
-        tablaHTML += `
-                    <tr class="row-total">
-                        <td colspan="2">Total de horas pedagógicas semanales</td>
-                        <td class="col-horas">${totalHoras} horas</td>
-                    </tr>
-                </tbody>
-            </table>
-        `;
-
-        // 3. Inyección limpia en el contenedor A4 con todas las variables de tutoría corregidas estrictamente
-        container.innerHTML = `
-            <div class="cert-header">
-                <img src="escudo.png" alt="Escudo UEF La Dolorosa" class="cert-logo">
-                <div class="cert-header-text">MINISTERIO DE EDUCACIÓN<br>COORDINACIÓN ZONAL 7 - DISTRITO 11D01<br>UNIDAD EDUCATIVA FISCOMISIONAL "LA DOLOROSA"</div>
-            </div>
-            <div class="cert-title">CERTIFICADO DE DISTRIBUTIVO DE CARGA HORARIA SEMANAL</div>
-            <div class="cert-body">
-                <p>El Viceerrectorado de la Unidad Educativa Fiscomisional "La Dolorosa", en cumplimiento con las normativas legales vigentes y la planificación del orgánico funcional institucional,</p>
-                <p><strong>CERTIFICA QUE:</strong></p>
-                <p>${articuloElegido} docente <strong>${tituloFormal} ${meta.nombre_completo}</strong>, portador/a de la cédula de ciudadanía Nro. <strong>${meta.cedula}</strong>, cumple de manera efectiva con su distributivo de labor pedagógica en la <strong>Jornada Matutina</strong> durante el presente Año Lectivo <strong>2026 - 2027</strong>.</p>
-                <p>Su carga horaria semanal consolidada asciende a un total de <strong>${conversionLetras(totalHoras)} (${totalHoras}) horas pedagógicas</strong>, las cuales se encuentran distribuidas detalladamente en las asignaturas y niveles descritos en la tabla resumen adjunta.</p>
-                ${tutorDeCurso ? `<p>De igual manera, se deja constancia formal que sustantivoProfesional ejerce las funciones de <strong>Docente Tutor</strong> del curso <strong>{tutorDeCurso}</strong>, liderando el acompañamiento educativo integral del paralelo respectivo durante el presente periodo.</p>` : ""}
-                <p>Para que así conste y a petición verbal de la parte interesada para los fines pertinentes, se firma el presente certificado en la ciudad de Loja, ${diaEstructurado} del mes de ${mesTexto} del año ${anioTexto}.</p>
-            </div>
-            ${tablaHTML}
-            <div class="cert-signatures">
-                <div class="signature-block"><div class="signature-line"></div><strong>Mgtr. Patricio Espinoza</strong><br>Vicerrector de la Jornada Matutina</div>
-                <div class="signature-block"><div class="signature-line"></div><strong>Ab. Giovanna Salinas</strong><br>Secretaria / Vicerrectorado</div>
-            </div>
-            <div class="cert-footer-note">Elaborado por: Jorge Sarmiento Zumba | Coordinador de la Comisión de Planeamiento Institucional.</div>
-        `;
+        // 3. Inyección limpia, robusta e inmune a errores de escape tipográficos
+        container.innerHTML = 
+            '<div class="cert-header">' +
+                '<img src="escudo.png" alt="Escudo UEF La Dolorosa" class="cert-logo">' +
+                '<div class="cert-header-text">MINISTERIO DE EDUCACIÓN<br>COORDINACIÓN ZONAL 7 - DISTRITO 11D01<br>UNIDAD EDUTATIVA FISCOMISIONAL "LA DOLOROSA"</div>' +
+            '</div>' +
+            '<div class="cert-title">CERTIFICADO DE DISTRIBUTIVO DE CARGA HORARIA SEMANAL</div>' +
+            '<div class="cert-body">' +
+                '<p>El Vicerrectorado de la Unidad Educativa Fiscomisional "La Dolorosa", en cumplimiento con las normativas legales vigentes y la planificación del orgánico funcional institucional,</p>' +
+                '<p><strong>CERTIFICA QUE:</strong></p>' +
+                '<p>' + articuloElegido + ' docente <strong>' + tituloFormal + ' ' + meta.nombre_completo + '</strong>, portador/a de la cédula de ciudadanía Nro. <strong>' + meta.cedula + '</strong>, cumple de manera efectiva con su distributivo de labor pedagógica en la <strong>Jornada Matutina</strong> durante el presente Año Lectivo <strong>2026 - 2027</strong>.</p>' +
+                '<p>Su carga horaria semanal consolidada asciende a un total de <strong>' + conversionLetras(totalHoras) + ' (' + totalHoras + ') horas pedagógicas</strong>, las cuales se encuentran distribuidas detalladamente en las asignaturas y niveles descritos en la tabla resumen adjunta.</p>' +
+                textoTutoriaHTML +
+                '<p>Para que así conste y a petición verbal de la parte interesada para los fines pertinentes, se firma el presente certificado en la ciudad de Loja, ' + diaEstructurado + ' del mes de ' + mesTexto + ' del año ' + anioTexto + '.</p>' +
+            '</div>' +
+            tablaHTML +
+            '<div class="cert-signatures">' +
+                '<div class="signature-block"><div class="signature-line"></div><strong>Mgtr. Patricio Espinoza</strong><br>Vicerrector de la Jornada Matutina</div>' +
+                '<div class="signature-block"><div class="signature-line"></div><strong>Ab. Giovanna Salinas</strong><br>Secretaria / Vicerrectorado</div>' +
+            '</div>' +
+            '<div class="cert-footer-note">Elaborado por: Jorge Sarmiento Zumba | Coordinador de la Comisión de Planeamiento Institucional.</div>';
     }
 });
