@@ -1,4 +1,3 @@
-
 // =========================================================================
 // ARCHIVO: app.js (MOTOR AUTOMATIZADO CON GÉNERO ELÁSTICO Y FECHA DINÁMICA)
 // Comisión de Planeamiento Institucional - UEF La Dolorosa
@@ -58,8 +57,8 @@ document.addEventListener("DOMContentLoaded", () => {
         let tituloFormal = override.value === "AUTO" ? meta.titulo : override.value;
         const articuloElegido = articuloSelect ? articuloSelect.value : "El";
 
-        // Mapeo automático de concordancia gramatical interna
-        const sustantivoProfesional = articuloElegido === "El" ? "el profesional mencionado" : "la profesional mencionada";
+        // Mapeo automático de concordancia gramatical interna para remover el el/la
+        const sustantivoProfesional = (articuloElegido === "El") ? "el profesional mencionado" : "la profesional mencionada";
 
         const claveBuscada = normalizarIdentificador(profesorKey);
         const clasesDocente = DATA_HORARIOS.filter(clase => normalizarIdentificador(clase.Profesor) === claveBuscada);
@@ -82,9 +81,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const tablaResumen = Object.values(agrupacion).sort((a, b) => a.asignatura.localeCompare(b.asignatura));
 
-        // Convertidor de enteros a texto formal castellano
         const conversionLetras = (num) => {
-            const u = ["cero", "una", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve", "diez", "once", "doce", "trece", "catorce", "quince", "dieciséis", "diecisiete", "dieciocho", "diecinueve", "veinte", "veintiuna", "veintidós", "veintitrés", "veinticuatro", "veinticinco", "veintiséis", "veintisiete", "veintiocho", "veintinueve", "treinta", "treinta y una", "treinta y dos", "treinta y tres", "treinta y cuatro", "treinta y cinco", "treinta y seis", "treinta y siete", "treinta y ocho", "treinta y nueve", "cuarenta"];
+            const u = ["cero", "una", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve", "diez", "once", "doce", "trece", "catorce", "quince", "dieciséis", "diecisiete", "dieciocho", "diecinueve", "veinte", "veintiuna", "veintidós", "veintitrés", "veinticuatro", "veinticinco", "veintiséis", "veintisiete", "veintiocho", "veintinueve", "treinta"];
             return u[num] || num.toString();
         };
 
@@ -100,11 +98,11 @@ document.addEventListener("DOMContentLoaded", () => {
         // Conversión escrita del año de forma dinámica
         let anioTexto = "dos mil veintiséis";
         if (anioNum === 2027) anioTexto = "dos mil veintisiete";
-        else if (anioNum === 2028)  anioTexto = "dos mil veintiocho";
+        else if (anioNum === 2028) anioTexto = "dos mil veintiocho";
         else if (anioNum !== 2026) anioTexto = anioNum.toString();
 
-        let diaEstructurado = diasTexto[diaNum] + " días";
-        if (diaNum === 1) diaEstructurado = "el primer día";
+        let diaEstructurado = "a los " + diasTexto[diaNum] + " días";
+        if (diaNum === 1) diaEstructurado = "al primer día";
 
         let tablaHTML = `
             <div class="cert-table-title">CUADRO RESUMEN DE DISTRIBUCIÓN DE TRABAJO:</div>
@@ -149,7 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <p>${articuloElegido} docente <strong>${tituloFormal} ${meta.nombre_completo}</strong>, portador/a de la cédula de ciudadanía Nro. <strong>${meta.cedula}</strong>, cumple de manera efectiva con su distributivo de labor pedagógica en la <strong>Jornada Matutina</strong> durante el presente Año Lectivo <strong>2026 - 2027</strong>.</p>
                 <p>Su carga horaria semanal consolidada asciende a un total de <strong>${conversionLetras(totalHoras)} (${totalHoras}) horas pedagógicas</strong>, las cuales se encuentran distribuidas detalladamente en las asignaturas y niveles descritos en la tabla resumen adjunta.</p>
                 ${tutorDeCurso ? `<p>De igual manera, se deja constancia formal que sustantivoProfesional ejerce las funciones de <strong>Docente Tutor</strong> del curso <strong>{tutorDeCurso}</strong>, liderando el acompañamiento educativo integral del paralelo respectivo durante el presente periodo.</p>` : ""}
-                <p>Para que así conste y a petición verbal de la parte interesada para los fines pertinentes, se firma el presente certificado en la ciudad de Loja, a los ${diaEstructurado} del mes de ${mesTexto} del año ${anioTexto}.</p>
+                <p>Para que así conste y a petición verbal de la parte interesada para los fines pertinentes, se firma el presente certificado en la ciudad de Loja, ${diaEstructurado} del mes de ${mesTexto} del año ${anioTexto}.</p>
             </div>
             ${tablaHTML}
             <div class="cert-signatures">
