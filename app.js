@@ -1,7 +1,7 @@
 // =========================================================================
-// ARCHIVO: app.js (MOTOR AUTOMATIZADO CON CONCATENACIÓN CONCORDANTE COMPLETA)
+// ARCHIVO: app.js (MOTOR AUTOMATIZADO DE CONCATENACIÓN CRUZADA BLINDADA)
 // Comisión de Planeamiento Institucional - UEF La Dolorosa
-// Elaborado por: Jorge Sarmiento Zumba
+// Elaborado por: Ab. Giovanna Salinas y Jorge Sarmiento Zumba
 // =========================================================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let tituloFormal = override.value === "AUTO" ? meta.titulo : override.value;
         const articuloElegido = articuloSelect ? articuloSelect.value : "El";
 
-        // Mapeo automático de concordancia gramatical interna para remover el el/la de raíz
+        // Mapeo automático de concordancia gramatical interna
         const sustantivoProfesional = (articuloElegido === "El") ? "el profesional mencionado" : "la profesional mencionada";
 
         const claveBuscada = normalizarIdentificador(profesorKey);
@@ -109,17 +109,17 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         tablaHTML += '<tr class="row-total"><td colspan="2">Total de horas pedagógicas semanales</td><td class="col-horas">' + totalHoras + ' horas</td></tr></tbody></table>';
 
-        // Construcción segura del fragmento dinámico de tutoría mediante concatenación clásica limpia
+        // 🛠️ BLINDAJE DE TUTORÍA: Unión forzada por signos de suma para romper el bug tipográfico del chat
         let textoTutoriaHTML = "";
         if (tutorDeCurso) {
             textoTutoriaHTML = '<p>De igual manera, se deja constancia formal que ' + sustantivoProfesional + ' ejerce las funciones de <strong>Docente Tutor</strong> del curso <strong>' + tutorDeCurso + '</strong>, liderando el acompañamiento educativo integral del paralelo respectivo durante el presente periodo.</p>';
         }
 
-        // 3. Inyección limpia, robusta e inmune a errores de escape tipográficos
+        // 3. Inyección máster 100% compatible y libre de comillas invertidas interpretativas
         container.innerHTML = 
             '<div class="cert-header">' +
                 '<img src="escudo.png" alt="Escudo UEF La Dolorosa" class="cert-logo">' +
-                '<div class="cert-header-text">MINISTERIO DE EDUCACIÓN<br>COORDINACIÓN ZONAL 7 - DISTRITO 11D01<br>UNIDAD EDUTATIVA FISCOMISIONAL "LA DOLOROSA"</div>' +
+                '<div class="cert-header-text">MINISTERIO DE EDUCACIÓN<br>COORDINACIÓN ZONAL 7 - DISTRITO 11D01<br>UNIDAD EDUCATIVA FISCOMISIONAL "LA DOLOROSA"</div>' +
             '</div>' +
             '<div class="cert-title">CERTIFICADO DE DISTRIBUTIVO DE CARGA HORARIA SEMANAL</div>' +
             '<div class="cert-body">' +
