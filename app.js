@@ -1,4 +1,4 @@
-// =========================================================================
+// ========================================================================
 // ARCHIVO: app.js (MOTOR AUTOMATIZADO CON DETECCIÓN INTELIGENTE DE GÉNERO)
 // Comisión de Planeamiento Institucional - UEF La Dolorosa
 // Elaborado por: Ab. Giovanna Salinas y Jorge Sarmiento Zumba
